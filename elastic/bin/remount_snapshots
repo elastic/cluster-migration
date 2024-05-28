@@ -1,0 +1,81 @@
+#!/bin/bash
+
+SHARDS=400
+MAXDISK=999
+MINDISK=999
+REGEX=''
+usage() {
+  cat <<EOF
+Usage:
+
+  remount_shapshots [-c] [-f] [-s shards] [-m maxdisk] [-n mindisk] cluster
+
+  PARAMETERS
+  cluster     ID of cluster (clusters are defined in /etc/elastic-services.json)
+
+  OPTIONS
+  -c          When checking disk utilization, consider cold nodes. Can be
+              combined with "-f".
+  -f          When checking disk utilization, consider frozen nodes. Can be
+              combined with "-c".
+  -s shards   How many simultaneous shard recovers to allow before pausing?
+              Default: 400
+  -m maxdisk  How much should the most-used disk be used before pausing? 
+              Default: No maximum
+  -n mindisk  How much should the least-used disk be used before pausing?
+              Default: No minimum
+
+EOF
+  exit
+  }
+
+while getopts "cfsmnh?" option; do
+  case $option in
+  s*)
+    SHARDS=$OPTARG
+  ;;
+  m*)
+    MAXDISK=$OPTARG
+  ;;
+  n*)
+    MINDISK=$OPTARG
+  ;;
+  c*)
+    REGEX="${REGEX}c"
+  ;;
+  f*)
+    REGEX="${REGEX}f"
+  ;;
+  [h?])
+    usage
+  esac
+done
+REGEX="[${REGEX}]"
+
+#Grab the cluster ID from the command line
+
+source /etc/profile.d/elastic-services.sh
+pushd searchable_snapshots
+
+for $scriptlet in $(ls *.sh); do
+  while true; do
+    shards=$(recovering_shards $cluster)
+    disks=($(get_storage $cluster $REGEX))
+    max=${disks[0]}
+    min=$max
+    for v in ${disks[*]}; do
+      (( v > max )) && max=$v
+      (( v < min )) && min=$v
+    done
+    if [[ $shards -lt $SHARDS && $max -lt $MAXDISK && $min -lt $MINDISK ]]; then
+      break
+    else
+      sleep 10
+    fi
+  done
+  ./$scriptlet
+  mv $scriptlet done/
+done
+popd
+
+# vim: ts=4 sts=4 sw=4 et
