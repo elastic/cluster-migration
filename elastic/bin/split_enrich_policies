@@ -1,0 +1,15 @@
+#!/bin/bash
+file=${1:-enrich_policies.json}
+lines=$(grep '"config"\s*:\s*{' $file | wc -l)
+
+[[ -d enrich_policies ]] || mkdir enrich_policies
+
+echo "$lines templates in $file"
+
+v=$(( lines - 1 ))
+for (( n=0; n<=v; n++ )); do
+    name=$(jq -r .policies[$n].config.match.name $file)
+    echo "Splitting $name - $((n+1)) of $lines"
+    jq .policies[$n].config $file | jq 'del(.match.name)' > component_templates/$name.json
+done
+# vim: ts=4 sts=4 sw=4 et ft=sh
