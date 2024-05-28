@@ -1,7 +1,5 @@
 #!/bin/bash
 file=${1:-component_templates.json}
-echo $file
-
 lines=$(grep '\"component_template\"\s*:\s*{' $file | wc -l)
 
 [[ -d component_templates ]] || mkdir component_templates
@@ -14,5 +12,4 @@ for (( n=0; n<=v; n++ )); do
     echo "Splitting $name - $((n+1)) of $lines"
     jq .component_temapltes[$n].component_template $file > component_templates/$name.json
 done
-
 # vim: ts=4 sts=4 sw=4 et ft=sh
