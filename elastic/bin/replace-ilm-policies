@@ -1,0 +1,31 @@
+#!/bin/sh
+
+source /etc/profile.d/elastic-services.sh
+
+if [[ $# -lt 3 ]]; then
+     cat <<EOF
+Usage:
+
+     replace-ilm-policy cluster policy indexes
+
+Where:
+     cluster      identifier for cluster (present in /etc/elastic-services.json)
+     policy       name of desired ilm policy
+     indexes      file containing list of indexes to replace the policy on
+
+EOF
+    exit
+fi
+
+cluster=$1
+policy=$2
+indexes=$3
+
+while read $index; do
+     postcurl ${cluster} "${index}/_ilm/remove"
+     echo
+     putcurl ${cluster} "${index}/_settings" "{\"index.lifecycle.name\": \"${policy}\"}"
+     echo
+done < ${indexes}
+
+# vim: ts=4 sts=4 sw=4 et ft=sh
