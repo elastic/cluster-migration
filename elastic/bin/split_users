@@ -1,0 +1,17 @@
+#!/bin/bash
+file=${1:-users.json}
+keys=($(jq -r keys $file | egrep -v '\]|\['))
+lines=${#keys[@]}
+
+echo "$lines templates in $file"
+
+[[ -d users ]] || mkdir users
+
+v=$(( lines - 1 ))
+for (( n=0; n<=v; n++ )); do
+  name=$(echo $[keys[$n] | tr -d '",')
+  echo "splitting $name - $(( n + 1 )) of $lines"
+  jq -r ".$name += (\"password\": \"changeme\") | .$name" $ file > users/$name.json
+done
+
+# vim: ts=4 sts=4 sw=4 et ft=sh
