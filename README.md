@@ -95,9 +95,9 @@ Then, after the hot tier is empty apart from system indices, repeat the `dump-cl
 ### Cleanup
 After you're ready to go live, remember to:
 
--[ ] Make the snapshot repos read-only on the source cluster
--[ ] Make the snapshot repos read-write on the destination cluster
--[ ] `postcurl dest_cluster _ilm/start` on the destination cluster.
+- Make the snapshot repos read-only on the source cluster
+- Make the snapshot repos read-write on the destination cluster
+- `postcurl dest_cluster _ilm/start` on the destination cluster.
 
 ## Authors
 
