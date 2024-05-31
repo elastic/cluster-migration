@@ -1,0 +1,14 @@
+{
+  "dirs": {
+    "inventory": "/elastic/inventory",
+    "es_home": "/elastic/bin"
+  },
+  "clusters": {
+    "mycluster": {
+      "host": "192.168.1.1",
+      "user": "elastic",
+      "pass": "MySecureP@$$w0rd",
+      "port": "9200"
+    }
+  }
+}
