@@ -1,6 +1,8 @@
 # cluster-migration
 Tools and scripts for migrating large clusters using searchable snapshots as the primary data movement mechanism.
 
+*DISCLAIMER*: These scripts are offered in support of the idea of using searchable snapshots to re-home data to a new cluster. You agree to use them, and the procedure below, at your own risk.
+
 ## Setup
 Download the contents of this repository. Place the files in the bin/ directory somewhere on your PATH. Put etc/profile.d/elastic-services.sh in your /etc/profile.d/ (make it executable!) and etc/elastic-services.json in your /etc.
 
