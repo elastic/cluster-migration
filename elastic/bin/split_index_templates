@@ -1,0 +1,16 @@
+#!/bin/bash
+file=${1:-index_templates.json}
+lines=$(grep '\"index_template\"\s*:\s*{' $file | wc -l)
+
+echo "$lines templates in $file"
+
+[[ -d index_templates ]] || mkdir index_templates
+
+v=$(( lines - 1 ))
+for (( n=0; n<=v; n++ )); do
+  name=$(jq -r .index_templates[$n].name $file)
+  echo "splitting $name - $(( n + 1 )) of $lines"
+  jq .index_templates[$n].index_template $file > index_templates/$name.json
+done
+
+# vim: ts=4 sts=4 sw=4 et ft=sh
