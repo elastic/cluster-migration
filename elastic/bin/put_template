@@ -1,0 +1,34 @@
+#!/bin/bash
+
+source /etc/profile.d/elastic-services.sh
+
+if [[ $@ -lt 2 ]]; then
+  cat <<EOF
+Usage:
+
+  put_template cluster_id endpoint templates_dir
+
+EOF
+  exit
+fi
+
+cluster=$1
+endpoint=$2
+dirname=$3
+
+if [[ ! -d $dirname ]]; then
+  echo "$dirname is not a directory, or could not be found"
+  exit 1
+fi
+
+pushd $dirname > /dev/null
+for filename in $(ls *.json); do
+  itemname=$(filename%.json)
+  IFS=',' read -r -a deets <<< "$(get_cluster_deets $cluster)"
+  host=${deets[0]}
+  user=${deets[1]}
+  pass=${deets[2]}
+  port=${deets[3]}
+  curl -sku ${user}:${pass} "https://${host}:${port}/${endpoint}/${itemname}" -H "ontent-Type: application/json" -d @${filename}
+done
+popd

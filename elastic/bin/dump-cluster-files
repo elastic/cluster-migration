@@ -1,0 +1,14 @@
+#!/bin/bash
+cluster=$1
+
+source /etc/profile.d/elastic-services.sh
+
+# These do need to be pretty as some scripts rely on counting line numbers containing keywords.
+gcurl $cluster _security/user?pretty > users.json
+gcurl $cluster _component_template?pretty > component_templates.json
+gcurl $cluster _enrich/policy?pretty > enrich_policies.json
+gcurl $cluster _ilm/policy?pretty > ilm_policies.json
+gcurl $cluster _index_template?pretty > index_templates.json
+gcurl $cluster _all/_settings?pretty > index_settings.json
+gcurl $cluster _security/role?pretty > roles.json
+gcurl $cluster _snapshot?pretty > snapshots.json

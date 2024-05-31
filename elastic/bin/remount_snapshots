@@ -1,0 +1,71 @@
+#!/bin/bash
+
+SHARDS=400
+MAXDISK=999
+usage() {
+  cat <<EOF
+Usage:
+
+  remount_shapshots [-s shards] [-m maxdisk] cluster
+
+  PARAMETERS
+  cluster     ID of cluster (clusters are defined in /etc/elastic-services.json)
+
+  OPTIONS
+  -s shards   How many simultaneous shard recovers to allow before pausing?
+              Defaults to 400
+  -m maxdisk  How much should the most-used disk contain before pausing? 
+              Default: No maximum
+
+EOF
+  exit
+  }
+
+while getopts "s:m:h?" option; do
+  case $option in
+  s*)
+    SHARDS=$OPTARG
+  ;;
+  m*)
+    MAXDISK=$OPTARG
+  ;;
+  [h?])
+    usage
+  esac
+done
+
+shift "$((OPTIND - 1))"
+if [[ $# -lt 1 ]]; then
+    usage
+fi
+
+cluster=$1
+
+source /etc/profile.d/elastic-services.sh
+pushd searchable_snapshots
+
+[[ -d done ]] || mkdir done
+
+for $scriptlet in $(ls *.sh); do
+  while true; do
+    shards=$(recovering_shards $cluster)
+    disks=($(get_storage $cluster $REGEX))
+    max=${disks[0]}
+    min=$max
+    for v in ${disks[*]}; do
+      (( v > max )) && max=$v
+    done
+    if [[ $shards -lt $SHARDS && $max -lt $MAXDISK ]]; then
+      echo
+      break
+    else
+      echo -n "."
+      sleep 10
+    fi
+  done
+  ./$scriptlet
+  mv $scriptlet done/
+done
+popd
+
+# vim: ts=4 sts=4 sw=4 et
