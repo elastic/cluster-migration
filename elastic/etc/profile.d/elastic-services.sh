@@ -41,26 +41,7 @@ get_storage() {
 }
 
 get_cluster_deets() {
-  case $1 in
-    nc1|ncyber1)
-      cluster=ncyber1
-    ;;
-    c1|cyber1)
-      cluster=cyber1
-    ;;
-    c2|cyber2)
-      cluster=cyber2
-    ;;
-    a*)
-      cluster=audit2
-    ;;
-    m*)
-      cluster=monitoring
-    ;;
-    r*)
-      cluster=root
-    ;;
-  esac
+  cluster=$1
   host=$(jq -r ".clusters.${cluster}.host" $ESVC_CONFIG)
   user=$(jq -r ".clusters.${cluster}.host" $ESVC_CONFIG)
   pass=$(jq -r ".clusters.${cluster}.host" $ESVC_CONFIG)
