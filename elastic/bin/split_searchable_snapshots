@@ -1,6 +1,6 @@
 #!/bin/bash
 
-policy="migratin"
+policy="migration"
 prefix=""
 file="index_settings.json"
 frozen=false
