@@ -20,10 +20,10 @@ Usage:
                     and mount as a partial. If not set, "-dtc" will be appended,
                     indicating a cold mount instead and the _tier_preference will
                     likewise be set to data_cold.
-    -p policY_name  Base name of ILM policy. This assumes there will be two
+    -p policy_name  Base name of ILM policy. This assumes there will be two
                     policies, named policy_name-dtc and policy_name-dtf, for 
                     direct-to-cold and direct-to-frozen, respectively.  These policies
-                    simpoy move data to the selected tier at 0m, have no rollover, and
+                    simply move data to the selected tier at 0m, have no rollover, and
                     then age the data to subsequent tiers or deletion as usual.
 
 EOF
