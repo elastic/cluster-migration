@@ -48,7 +48,7 @@ while getopts "i:fp:h?" option; do
   esac
 done
 shift "$((OPTIND - 1))"
-if [[ $# -lt 1 ]][; then
+if [[ $# -lt 1 ]]; then
   usage
 fi
 cluster=$1
