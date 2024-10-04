@@ -105,4 +105,4 @@ After you're ready to go live, remember to:
 
 - Bret Wortman, Principal Consulting Architect   bret.wortman@elastic.co
 
-This code leverages code developed by others as well. Any issues are purely with my implemntation of their efforts, not with their contributions. Huge thanks to Connor Pierce, also of the US Pubsec Services organization for his invaluable work on the early split_* scripts and for helping me get a good grip on `jq`.
+This code leverages code developed by others as well. Any issues are purely with my implemntation of their efforts, not with their contributions. Huge thanks to [cp-elastic](https://github.com/cp-elastic) for his invaluable work on the early split_* scripts and for helping me get a good grip on `jq`.
