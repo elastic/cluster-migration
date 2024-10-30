@@ -29,6 +29,6 @@ for filename in $(ls *.json); do
   user=${deets[1]}
   pass=${deets[2]}
   port=${deets[3]}
-  curl -sku ${user}:${pass} "https://${host}:${port}/${endpoint}/${itemname}" -H "ontent-Type: application/json" -d @${filename}
+  curl -XPUT -sku ${user}:${pass} "https://${host}:${port}/${endpoint}/${itemname}" -H "ontent-Type: application/json" -d @${filename}
 done
 popd

@@ -12,3 +12,4 @@ gcurl $cluster _index_template?pretty > index_templates.json
 gcurl $cluster _all/_settings?pretty > index_settings.json
 gcurl $cluster _security/role?pretty > roles.json
 gcurl $cluster _snapshot?pretty > snapshots.json
+gcurl $cluster _watcher/_query/watches?pretty > watches.json
