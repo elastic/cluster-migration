@@ -57,6 +57,12 @@ split_roles
 put_templates dest_cluster _security/role roles
 ```
 
+#### Watches
+```sh
+split_watches
+put_templates dest_cluster _watchers/watch watches
+```
+
 ### ILM Updates
 
 Create two ILM policies, `migration-dtc` and `migration-dtf`. If you use other names, you'll still need to have `-dtc` and `-dtf` appended and will need to provide the basename in later steps.
