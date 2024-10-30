@@ -1,0 +1,20 @@
+#!/bin/bash
+file=${1:-watches.json}
+watches=$(jq '.count' $file)
+
+[[ -d watches ]] && rm -rf watches
+[[ -d watches ]] || mkdir watches
+
+echo "$watches watches in $file"
+
+v=$(( watches - 1 ))
+c=0
+for (( n=0; n<=v; n++ )); do
+    id=$(jq -r .watches[$n]._id $file)
+    echo "Extracting $id - $((n+1)) of $watches"
+    #id=$(tr ' ' '_' <<< $id)
+    jq -r .watches[$n].watch $file > watches/${id}.json
+    (( c++ ))
+done
+echo "Split $c of $watches"
+# vim: ts=4 sts=4 sw=4 et ft=sh
